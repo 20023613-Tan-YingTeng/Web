@@ -1,0 +1,79 @@
+﻿@model List<Product>
+
+@section Script{
+<script>
+    // jQuery Table
+    $(document).ready(function(){
+        $('#JSProductTable').DataTable({
+            ordering: true,
+            paging: true,
+            searching: true,
+            info: true,
+            lengthChange: false,
+            pagelength: 5,
+            responsive: true
+        });
+    });
+
+    function confirmDeletion(event, id) {
+        if (confirm(`Delete User: ` + id) === false) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    }
+
+</script>
+}
+
+<style>
+    #table {
+        padding: 60px
+    }
+</style>
+
+@*Show successful/ error message when click update/create... button*@
+@if (TempData["Msg"] != null)
+{
+    <div class="mb-3">
+        <div class="alert alert-success">
+            <text>@TempData["Msg"]</text>
+        </div>
+    </div>
+}
+
+<div id="table">
+    <table id="JSProductTable" class="table table-bordered table-hover">
+
+        @*TABLE HEADER*@
+        <thead>
+            <tr>
+                <th>ProductID</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        @*TABLE DATA*@
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.ProductId</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td>
+                        <a asp-controller="Product" asp-action="Update" asp-route-id="@product.ProductId">
+                            Update
+                        </a>
+                        <span>/</span>
+                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.ProductId" onclick="return confirmDeletion(event,'@product.Name')" >
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

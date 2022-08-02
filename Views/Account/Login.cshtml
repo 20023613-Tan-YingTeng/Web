@@ -1,0 +1,90 @@
+﻿@model LoginUser
+
+<style>
+    label {
+        font-size: 20px;
+    }
+
+    #title {
+        padding: 30px 0 20px 30px;
+    }
+
+    .field {
+        margin: 30px 0 0 0;
+    }
+
+    .btn {
+        margin: 60px 0 40px 0;
+    }
+    
+    .container i {
+        cursor: pointer;
+    }
+</style>
+
+@section Script{
+@*To show and hide password by clicking on eye*@
+<script type="text/javascript">
+   $(function () {
+            $("#togglePassword").click(function () {
+                $(this).toggleClass("fa-eye-slash");
+                var x = $("#Password").attr("type");
+                if (x == "password")
+                {
+                    $("#Password").attr("type","text");
+                }
+                else
+                {
+                    $("#Password").attr("type","password");
+                }
+                               
+            });
+        });
+</script>
+}
+
+<div class="container col-lg-7" style="background-color:#D8D8D8;">
+
+    @*TITLE*@
+    <div class="row" id="title">
+        <p class="h1">Log In</p>
+    </div>
+
+    <form asp-controller="Account" asp-action="Login" method="post">
+
+        @*USERNAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Username" class="form-label offset-1 col-lg-2">Username:</label>
+             <div class="col-lg-5 col-sm-7 col-10 offset-1">
+                <input asp-for="Username" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="Username" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*PASSWORD TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Password" class="form-label offset-1 col-lg-2">Password:</label>
+             <div class="col-lg-5 col-sm-7 col-10 offset-1 input-group">
+                <input asp-for="Password" class="form-control form-control-sm" />
+                @*To show and hide password by clicking on eye and append it to Password Field*@
+                <div class="input-group-append">
+                    <span class="input-group-text form-control form-control-sm">
+                        <i id="togglePassword" class="fa fa-eye fa-eye-slash"></i>
+                    </span>
+                </div>
+            </div>
+            <span asp-validation-for="Password" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        <div class="row form-group field">
+            <p class="text-danger offset-1">@ViewData["Message"]</p>
+        </div>
+
+        @*LOGIN BUTTON*@
+        <div class="row">
+            <div class="col-lg-7 col-7"></div>
+            <input type="submit" class="btn btn-sm btn-primary col-lg-2 col-3" value="Log In" />
+        </div>
+    </form>
+
+</div>

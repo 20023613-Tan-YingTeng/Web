@@ -1,0 +1,81 @@
+﻿@model UsernameDTO
+
+@{
+    var userid = ViewData["userid"];
+}
+
+<style>
+    label {
+        font-size: 15px;
+    }
+
+    #title {
+        padding: 30px 0 20px 30px;
+    }
+
+    .field {
+        margin: 30px 0 0 0;
+    }
+
+    .btn {
+        margin: 60px 0 40px 0;
+    }
+
+    .container i {
+        cursor: pointer;
+    }
+</style>
+
+
+<div class="container col-lg-6" style="background-color:#D8D8D8;">
+
+    @*TITLE*@
+    <div class="row" id="title">
+        <p class="h1">Change Username</p>
+    </div>
+
+
+    <form asp-controller="Account" asp-action="ChangeUsername" method="post">
+
+        @*CURRENT USERNAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="CurrentUsername" class="form-label offset-1 col-lg-3">
+                Current Username:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input type="text" value="@userid"
+                       asp-for="CurrentUsername" class="form-control form-control-sm"
+                       readonly="readonly" />
+            </div>
+        </div>
+
+        @*NEW USERNAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="NewUname" class="form-label offset-1 col-lg-3">
+                New Username:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="NewUname" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="NewUname" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*CONFIRM USERNAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="ConfirmUname" class="form-label offset-1 col-lg-3">
+                Confirm Username:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="ConfirmUname" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="ConfirmUname" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*UPDATE BUTTON*@
+        <div class="row">
+            <div class="col-lg-9 col-7"></div>
+            <input type="submit" value="Update"
+                   class="btn btn-sm btn-primary col-lg-2 col-3" />
+        </div>
+    </form>
+</div>

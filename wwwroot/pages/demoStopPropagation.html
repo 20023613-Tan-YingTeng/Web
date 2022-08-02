@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+$(document).ready(function () {
+    $("#span1").click(function (event) {
+        event.stopPropagation();
+        alert("The span element was clicked.");
+    });
+    $("#span2").click(function (event) {
+        alert("The span element was clicked.");
+    });
+    $("p").click(function (event) {
+        alert("The p element was clicked.");
+    });
+    $("div").click(function (event) {
+        alert("The div element was clicked.");
+    });
+});
+    </script>
+
+</head>
+<body>
+    <h2>Demo Stop Propagation</h2>
+    <div style='background-color: yellow'>
+        Div Text
+        <p style='background-color: lightgreen'>
+            Para Text<br />
+            <span id="span1" style='background-color: orange'>
+                Span Text 1
+            </span>
+            <br />Para Text<br />
+            <span id="span2" style='background-color: orange'>
+                Span Text 2
+            </span>
+            <br />Para Text
+        </p>
+        Div Text
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,102 @@
+﻿@model List<InventoryItems>
+
+@section Script{
+<script>
+    // jQuery Table
+    $(document).ready(function(){
+        $('#JSInventoryTable').DataTable({
+            ordering: true,
+            paging: true,
+            searching: true,
+            info: true,
+            lengthChange: false,
+            pagelength: 5,
+            responsive: true
+        });
+    });
+</script>
+}
+
+<style>
+    #table {
+        padding: 60px
+    }
+</style>
+
+@*Show successful/ error message when click update/create... button*@
+@if (TempData["Msg"] != null)
+{
+    <div class="mb-3">
+        <div class="alert alert-success">
+            <text>@TempData["Msg"]</text>
+        </div>
+    </div>
+}
+
+<div id="table">
+    <table id="JSInventoryTable" class="table table-bordered table-hover">
+
+        @*TABLE HEADER*@
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Location</th>
+                <th>Product</th>
+                <th>Shape</th>
+                <th>Quantity</th>
+                <th>Min Qty</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Assigned To</th>
+                    <th>Actions</th>
+                }
+            </tr>
+        </thead>
+
+        @*TABLE DATA*@
+        <tbody>
+            @foreach (var item in Model)
+            {
+                
+                <tr>
+                    @if (item.Quantity < item.MinQuantity)
+                    {
+                        <td>@item.ItemId</td>
+                        <td style="color:red;font-weight:bold">@item.Inventory.Location</td>
+                        <td style="color:red;font-weight:bold">@item.Product.Name</td>
+                        <td style="color:red;font-weight:bold">@item.Shape.Name</td>
+                        <td style="color:red;font-weight:bold">@item.Quantity</td>
+                        <td>@item.MinQuantity</td>
+                    }
+                    else{
+                        <td>@item.ItemId</td>
+                        <td>@item.Inventory.Location</td>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Shape.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.MinQuantity</td>
+                    }
+
+                    @*If admin, can see update, put it in Name1, Name2 format*@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        var names = "";
+                        foreach (var person in item.Inventory.User)
+                        {
+                            names += person.Name + ", ";
+
+                        }
+                        names = names.Substring(0, names.Length - 2);
+
+                        <td>@names</td>
+                        <td>
+                            <a asp-controller="Inventory" asp-action="Update" asp-route-id="@item.ItemId">
+                                Update
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

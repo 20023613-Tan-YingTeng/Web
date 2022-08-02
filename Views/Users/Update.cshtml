@@ -1,0 +1,131 @@
+﻿@model Users
+
+@{
+    var userid = ViewData["userid"];
+}
+
+<style>
+    .form-label {
+        font-size: 15px;
+        font-weight: bold;
+        color: maroon;
+    }
+
+    #title {
+        padding: 30px 0 20px 30px;
+    }
+
+    .field {
+        margin: 30px 0 0 0;
+    }
+
+    .btn {
+        margin: 60px 0 40px 0;
+    }
+
+    .container i {
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        color: black;
+    }
+</style>
+
+@section Script{
+    <script type="text/javascript" >
+        $(document).ready(function () {
+          $('form').submit(function () {
+              var test = confirm('Proceed? Press OK to confirm');
+              if (test == true) {
+                  return true;
+              } else { 
+                  return false
+              };
+          });
+        });
+    </script>
+}
+
+<div class="container col-lg-6" style="background-color:#D8D8D8;">
+    
+    @*TITLE*@
+    <div class="row" id="title">
+        <p class="h1">Update @Model.Name</p>
+    </div>
+
+    
+    <form asp-controller="Users" asp-action="Update" method="post">
+        
+
+        @*USERID TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="UserId" class="form-label offset-1 col-lg-3">
+                User ID:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="UserId" class="form-control form-control-sm" readonly />
+            </div>
+            <span asp-validation-for="UserId" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*NAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Name" class="form-label offset-1 col-lg-3">
+                Name:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Name" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*ADMIN RADIO BUTTON*@
+        <div class="row form-group field">
+            <label asp-for="Role" class="form-label offset-1 col-lg-3">Role:</label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input " type="radio" id="rdRole1"
+                           asp-for="Role" value="Admin" />
+                    <label class="form-check-label" for="rdRole1">Admin</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="rdRole2"
+                           asp-for="Role" value="User" />
+                    <label class="form-check-label" for="rdRole2">User</label>
+                </div>
+            </div>
+        </div>
+
+        @*EMAIL TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Email" class="form-label offset-1 col-lg-3">
+                Email:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Email" class="form-control form-control-sm" />
+            </div>
+
+            <span asp-validation-for="Email" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*CONTACT NUMBER TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="ContactNo" class="form-label offset-1 col-lg-3">
+                ContactNo:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="ContactNo" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="ContactNo" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*CREATE BUTTON*@
+        <div class="row">
+            <div class="col-lg-9 col-7"></div>
+            <input type="submit" value="Update"
+                   class="btn btn-sm btn-primary col-lg-2 col-3" />
+        </div>
+    </form>
+</div>

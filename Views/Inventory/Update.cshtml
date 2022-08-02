@@ -1,0 +1,276 @@
+﻿@model InventoryItems
+
+@*DROP DOWN CHECK LIST IMPORTS*@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+@{
+    var userid = ViewData["userid"];
+    var name = ViewData["name"];
+}
+
+<style>
+    label {
+        font-size: 15px;
+        font-weight: bold;
+        color: maroon;
+    }
+
+    #title {
+        padding: 30px 0 20px 30px;
+    }
+
+    .field {
+        margin: 30px 0 0 0;
+    }
+
+    .btn {
+        margin: 60px 0 40px 0;
+    }
+
+    /*Styles for Drop Down Check List*/
+    .selectBox {
+        position: relative;
+    }
+
+        .selectBox select {
+            width: 100%;
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #mySelectOptions {
+        display: none;
+        border: 0.5px #7c7c7c solid;
+        background-color: #ffffff;
+        max-height: 150px;
+        overflow-y: scroll;
+    }
+
+        #mySelectOptions label {
+            display: block;
+            font-weight: normal;
+            display: block;
+            white-space: nowrap;
+            min-height: 1.2em;
+            background-color: #ffffff00;
+            padding: 0 2.25rem 0 .75rem;
+            /* padding: .375rem 2.25rem .375rem .75rem; */
+        }
+
+            #mySelectOptions label:hover {
+                background-color: #1e90ff;
+            }
+</style>
+
+@section Script{
+@*For Drop Down Check List*@
+<script type="text/javascript">
+           window.onload = (event) => {
+      initMultiselect();
+    }
+
+    function initMultiselect() {
+      checkboxStatusChange();
+
+      document.addEventListener("click", function(evt) {
+        var flyoutElement = document.getElementById('myMultiselect'),
+          targetElement = evt.target; // clicked element
+
+        do {
+          if (targetElement == flyoutElement) {
+            // This is a click inside. Do nothing, just return.
+            //console.log('click inside');
+            return;
+          }
+
+          // Go up the DOM
+          targetElement = targetElement.parentNode;
+        } while (targetElement);
+
+        // This is a click outside.
+        toggleCheckboxArea(true);
+        //console.log('click outside');
+      });
+    }
+
+    function checkboxStatusChange() {
+      var multiselect = document.getElementById("mySelectLabel");
+      var multiselectOption = multiselect.getElementsByTagName('option')[0];
+
+      var values = [];
+      var checkboxes = document.getElementById("mySelectOptions");
+      var checkedCheckboxes = checkboxes.querySelectorAll('input[type=checkbox]:checked');
+
+      for (const item of checkedCheckboxes) {
+        var checkboxValue = item.getAttribute('value');
+        values.push(checkboxValue);
+      }
+
+      var dropdownValue = '';
+      if (values.length > 0) {
+        dropdownValue = values.join(', ');
+      };
+
+      multiselectOption.innerText = dropdownValue;
+    }
+
+
+    function toggleCheckboxArea(onlyHide = false) {
+      var checkboxes = document.getElementById("mySelectOptions");
+      var displayValue = checkboxes.style.display;
+
+      if (displayValue != "block") {
+        if (onlyHide == false) {
+          checkboxes.style.display = "block";
+        }
+      } else {
+        checkboxes.style.display = "none";
+      }
+    }
+    
+    function popup(){
+        var txt = document.getElementById("test").value;
+        confirm("Update Item Id: " + txt);
+    }
+
+    $(document).ready(function () {
+      $('form').submit(function () {
+          var test = confirm('Proceed? Press OK to confirm');
+          if (test == true) {
+              return true;
+          } else { 
+              return false
+          };
+      });
+    });
+</script>
+}
+
+
+<div class="container col-lg-6" style="background-color:#D8D8D8;">
+
+    @*TITLE*@
+    <div class="row" id="title">
+        <p class="h1">Update Location @Model.Inventory.Location</p>
+    </div>
+
+
+    <form asp-controller="Inventory" asp-action="Update" method="post">
+
+        <input asp-for="InventoryId" hidden/>
+
+        @*ITEM ID TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="ItemId" class="form-label offset-1 col-lg-3">
+                Item ID:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input id="test" type="text" value="@Model.ItemId"
+                       asp-for="ItemId" class="form-control form-control-sm"
+                       readonly="readonly" />
+            </div>
+        </div>
+
+        @*ASSIGNED TO DROP CHECK LIST*@
+        <div class="row form-group field">
+            <label for="myMultiselect" class="form-label offset-1 col-lg-3">Assigned To:</label>
+            <div id="myMultiselect" class="multiselect col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <div id="mySelectLabel" class="selectBox" onclick="toggleCheckboxArea()">
+                    <select class="form-select" name="names">
+                        <option>somevalue</option>
+                    </select>
+                    <div class="overSelect"></div>
+                </div>
+                <div id="mySelectOptions">
+                    @{
+                        List<Users> users = (List<Users>)ViewData["users"]!;
+                        if (users is not null)
+                        {
+                            foreach (var i in users)
+                            {
+                                //Check value to see if user is selected
+                                bool check = false;
+
+                                // Loop through users that are already and change check value to true
+                                foreach (var o in Model.Inventory.User)
+                                {
+                                    if (i.Equals(o))
+                                    {
+                                        check = true;
+                                    }
+                                }
+
+                                //If check value is true, checkbox = checked
+                                if (check)
+                                {
+                                                                        <label for="@i.UserId"><input type="checkbox" id="@i.UserId" onchange="checkboxStatusChange()" value="@i.Name" checked />&nbsp @i.Name</label>
+                                }
+                                else
+                                {
+                                                                        <label for="@i.UserId"><input type="checkbox" id="@i.UserId" onchange="checkboxStatusChange()" value="@i.Name" />&nbsp @i.Name</label>
+
+                                }
+                            }
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        @*PRODUCT DROP DOWN LIST*@
+        <div class="row form-group field">
+            <label asp-for="ProductId" class="form-label offset-1 col-lg-3">
+                Product:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <select id="ddlShape" class="form-select form-select-sm"
+                        asp-for="ProductId"
+                        asp-items="@((SelectList)ViewData["products"]!)">
+                    <option value="">--SELECT--</option>
+                </select>
+            </div>
+            <span asp-validation-for="ProductId" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*SHAPE DROP DOWN LIST*@
+        <div class="row form-group field">
+            <label asp-for="ShapeId" class="form-label offset-1 col-lg-3">
+                Shape:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <select id="ddlShape" class="form-select form-select-sm"
+                        asp-for="ShapeId"
+                        asp-items="@((SelectList)ViewData["shapes"]!)">
+                    <option value="">--SELECT--</option>
+                </select>
+            </div>
+            <span asp-validation-for="ShapeId" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*MIN QUANTITY TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="MinQuantity" class="form-label offset-1 col-lg-3">
+                Min Quantity:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="MinQuantity" class="form-control form-control-sm" />
+            </div>
+
+            <span asp-validation-for="MinQuantity" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*UPDATE BUTTON*@
+        <div class="row">
+            <div class="col-lg-9 col-7"></div>
+            <input type="submit" value="Update" onsubmit="confirmPopup"
+                   class="btn btn-sm btn-primary col-lg-2 col-3" />
+        </div>
+    </form>
+</div>

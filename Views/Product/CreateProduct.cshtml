@@ -1,0 +1,86 @@
+﻿@model Product
+
+@{
+    var userid = ViewData["userid"];
+}
+
+<style>
+    label {
+        font-size: 15px;
+        font-weight: bold;
+        color: maroon;
+    }
+
+    #title {
+        padding: 30px 0 20px 30px;
+    }
+
+    .field {
+        margin: 30px 0 0 0;
+    }
+
+    .btn {
+        margin: 60px 0 40px 0;
+    }
+
+    .container i {
+        cursor: pointer;
+    }
+</style>
+
+
+@section Script{
+    <script type="text/javascript" >
+        $(document).ready(function () {
+          $('form').submit(function () {
+              var test = confirm('Proceed? Press OK to confirm');
+              if (test == true) {
+                  return true;
+              } else { 
+                  return false
+              };
+          });
+        });
+    </script>
+}
+
+<div class="container col-lg-6" style="background-color:#D8D8D8;">
+
+    @*TITLE*@
+    <div class="row" id="title">
+        <p class="h1">New Product</p>
+    </div>
+
+    <form asp-controller="Product" asp-action="CreateProduct" method="post">
+
+        @*PRODUCT NAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Name" class="form-label offset-1 col-lg-3">
+                Product Name:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Name" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*PRICE TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Price" class="form-label offset-1 col-lg-3">
+                Price Per Unit:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Price" class="form-control form-control-sm" />
+            </div>
+
+            <span asp-validation-for="Price" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*ADD BUTTON*@
+        <div class="row">
+            <div class="col-lg-9 col-7"></div>
+            <input type="submit" value="Create"
+                   class="btn btn-sm btn-primary col-lg-2 col-3" />
+        </div>
+    </form>
+</div>

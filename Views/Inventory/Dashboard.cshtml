@@ -1,0 +1,324 @@
+﻿@{
+    //Number of Products Sold
+    var dailyProductsSold = ViewData["dailyProductsSold"] as List<dynamic>;
+
+    int[] phonesCount = new int[31];
+    int[] tabletsCount = new int[31];
+    int[] laptopsCount = new int[31];
+    int[] pcsCount = new int[31];
+    int[] smartwatchesCount = new int[31];
+    int[] earbudsCount = new int[31];
+
+    if (dailyProductsSold != null)
+    {
+        for (int p = 0; p < phonesCount.Length; p++)
+        {
+            foreach(var t in dailyProductsSold)
+            {
+                if (t.product.Name.Equals("Phone") && t.product.Day == p)
+                {
+                    phonesCount[p]+= t.productsSold;
+                }else if (t.product.Name.Equals("Tablet") && t.product.Day == p)
+                {
+                    tabletsCount[p]+= t.productsSold;
+                }else if (t.product.Name.Equals("Laptop") && t.product.Day == p)
+                {
+                    laptopsCount[p]+= t.productsSold;
+                }else if (t.product.Name.Equals("PC") && t.product.Day == p)
+                {
+                    pcsCount[p]+= t.productsSold;
+                }else if (t.product.Name.Equals("Smartwatch") && t.product.Day == p)
+                {
+                    smartwatchesCount[p]+= t.productsSold;
+                }else if (t.product.Name.Equals("Earbuds") && t.product.Day == p)
+                {
+                    earbudsCount[p]+= t.productsSold;
+                }
+            }
+        }
+    }
+
+    //Most popular products
+    var topProducts = ViewData["topProducts"] as List<dynamic>;
+
+    string[] productLabels = new string[topProducts!.Count];
+    double[] productSales = new double[topProducts!.Count];
+
+    if (topProducts is not null)
+    {
+        for(int i=0; i< topProducts.Count; i++)
+        {
+            productLabels[i] = topProducts[i].Name;
+            productSales[i] = topProducts[i].Sales;
+        }
+    }
+
+    //No. of times product hit minQuantity
+    var minQuantityHit = ViewData["minQuantityHit"] as List<dynamic>;
+
+    string[] productLabelsPie = new string[minQuantityHit!.Count];
+    double[] productsMinCount = new double[minQuantityHit!.Count];
+
+    if (minQuantityHit is not null)
+    {
+        for(int i=0; i< minQuantityHit.Count; i++)
+        {
+            productLabelsPie[i] = minQuantityHit[i].Name;
+            productsMinCount[i] = minQuantityHit[i].Count;
+        }
+    }
+
+    //Avg Time taken to topup items
+    var topupList = ViewData["topupList"] as List<dynamic>;
+    string[] productLabelsScatter = new string[topupList!.Count];
+    int[] productQuantity = new int[topupList!.Count];
+    int[] productTopupDays = new int[topupList!.Count];
+
+    dynamic[] test = new dynamic[topupList!.Count];
+
+
+    if (topupList is not null)
+    {
+        for(int i=0; i< topupList.Count; i++)
+        {
+            productLabelsScatter[i] = topupList[i].Name;
+            productQuantity[i] = topupList[i].Quantity;
+            productTopupDays[i] = topupList[i].TopupDays;
+
+
+            dynamic item = new
+            {
+                x= topupList[i].Quantity,
+                y= topupList[i].TopupDays
+            }.ToExpando();
+            test[i] = Json.Serialize(item);
+            
+
+        }
+    }
+
+
+    
+}
+
+
+@section Script{
+    
+    <script type="text/javascript">
+        $( document ).ready(function() {
+
+            //Number of Products Sold in July
+            const labels1 = [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '22',
+        '23',
+        '24',
+        '25',
+        '26',
+        '27',
+        '28',
+        '29',
+        '30',
+        '31'
+      ];
+
+      const data1 = {
+        labels: labels1,
+        datasets: [
+            {
+              label: 'No. of Phones Sold',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(phonesCount),
+             },
+             {
+              label: 'No. of Tablets Sold',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(tabletsCount),
+             },
+             {
+              label: 'No. of Laptops Sold',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(laptopsCount),
+             },
+             {
+              label: 'No. of PCs Sold',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(pcsCount),
+             },
+             {
+              label: 'No. of Smartwatches Sold',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(smartwatchesCount),
+             },
+             {
+              label: 'No. of Earbuds Sold',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(earbudsCount),
+             },
+        ]
+      };
+
+      const config1 = {
+        type: 'line',
+        data: data1,
+        options: {}
+      };
+      const myChart1 = new Chart(
+        document.getElementById('noOfProductsSold'),
+        config1
+      );
+
+
+      //Most popular products
+
+      const labels2 = @Json.Serialize(productLabels);
+
+      const data2 = {
+        labels: labels2,
+        datasets: [
+            {
+              label: 'Product Rankings based on Sales in July',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: @Json.Serialize(productSales),
+             },
+        ]
+      };
+
+      const config2 = {
+        type: 'bar',
+        data: data2,
+        options: {}
+      };
+      const myChart2 = new Chart(
+        document.getElementById('topProducts'),
+        config2
+      );
+
+      //No. of times a product hit minQuantity
+            const labels3 = @Json.Serialize(productLabelsPie);
+
+              const data3 = {
+                labels: labels3,
+                datasets: [
+                    {
+                      label: 'Product Rankings based on Sales in July',
+                      backgroundColor: 'rgb(255, 99, 132)',
+                      borderColor: 'rgb(255, 99, 132)',
+                      data: @Json.Serialize(productsMinCount),
+                     },
+                ],
+              };
+
+              const config3 = {
+                type: 'doughnut',
+                data: data3,
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                         }   
+                    }
+                }
+              };
+              const myChart3 = new Chart(
+                document.getElementById('minQuantityHit'),
+                config3,
+              );
+
+
+        //Avg Time taken to topup items
+
+            const labels4 = @Json.Serialize(productLabelsScatter);
+
+            let b = [@Json.Serialize(test)];
+            let a = [];
+            for (var i = 0; i < b[0].length; i++){
+                a.push(JSON.parse(b[0][i]["value"]));
+            }
+            console.log(a);
+            
+
+              const data4 = {
+                labels: labels4,
+                datasets: [
+                    {
+                      label: 'Product Rankings based on Sales in July',
+                      backgroundColor: 'rgb(255, 99, 132)',
+                      borderColor: 'rgb(255, 99, 132)',
+                        data: [a]
+                     },
+                ],
+              };
+
+              const config4 = {
+                type: 'scatter',
+                data: data4,
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                         }   
+                    }
+                }
+              };
+              const myChart4 = new Chart(
+                document.getElementById('topupDays'),
+                config4,
+              );
+
+
+      //END
+            });
+    </script>
+}
+
+<div class="container">
+    <h2 class="pt-3 pb-3">Dashboard for Location B </h2>
+    <div class="row">
+        <div class="col-6">
+          <canvas id="noOfProductsSold"></canvas>
+        </div>
+
+        <div class="col-6">
+          <canvas id="topProducts"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+          <canvas id="minQuantityHit"></canvas>
+        </div>
+        <div class="col-6">
+          <canvas id="topupDays"></canvas>
+        </div>
+        <div class="col-3">
+
+        </div>
+    </div>
+</div>

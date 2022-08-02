@@ -1,0 +1,196 @@
+﻿@model CreateUser
+
+@{
+    var userid = ViewData["userid"];
+}
+
+<style>
+    .form-label {
+        font-size: 15px;
+        font-weight: bold;
+        color: maroon;
+    }
+
+    #title {
+        padding: 30px 0 20px 30px;
+    }
+
+    .field {
+        margin: 30px 0 0 0;
+    }
+
+    .btn {
+        margin: 60px 0 40px 0;
+    }
+
+    .container i {
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        color: black;
+    }
+</style>
+
+@section Script{
+@*To show and hide password by clicking on eye
+    2 function as there are two text fields that needs the eye
+*@
+<script type="text/javascript">
+    $(function () {
+     $(function () {
+              $("#togglePassword").click(function () {
+                  $(this).toggleClass("fa-eye-slash");
+                  var x = $("#Password").attr("type");
+                  if (x == "password")
+                  {
+                      $("#Password").attr("type","text");
+                  }
+                  else
+                  {
+                      $("#Password").attr("type","password");
+                  }
+
+              });
+          });
+
+              $("#toggleConfirmPassword").click(function () {
+                  $(this).toggleClass("fa-eye-slash");
+                  var x = $("#ConfirmPwd").attr("type");
+                  if (x == "password")
+                  {
+                      $("#ConfirmPwd").attr("type","text");
+                  }
+                  else
+                  {
+                      $("#ConfirmPwd").attr("type","password");
+                  }
+
+              });
+          });
+
+    
+        $(document).ready(function () {
+          $('form').submit(function () {
+              var test = confirm('Proceed? Press OK to confirm');
+              if (test == true) {
+                  return true;
+              } else { 
+                  return false
+              };
+          });
+        });
+</script>
+}
+
+<div class="container col-lg-6" style="background-color:#D8D8D8;">
+    
+    @*TITLE*@
+    <div class="row" id="title">
+        <p class="h1">New User</p>
+    </div>
+
+    
+    <form asp-controller="Account" asp-action="CreateUser" method="post">
+
+        @*USERNAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Username" class="form-label offset-1 col-lg-3">
+                Username:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Username" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="Username" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*NAME TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Name" class="form-label offset-1 col-lg-3">
+                Name:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Name" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*ADMIN RADIO BUTTON*@
+        <div class="row form-group field">
+            <label asp-for="Role" class="form-label offset-1 col-lg-3">Role:</label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input " type="radio" id="rdRole1"
+                           asp-for="Role" value="Admin" />
+                    <label class="form-check-label" for="rdRole1">Admin</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="rdRole2"
+                           asp-for="Role" value="User" />
+                    <label class="form-check-label" for="rdRole2">User</label>
+                </div>
+            </div>
+        </div>
+
+        @*PASSWORD TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Password" class="form-label offset-1 col-lg-3 ">Password:</label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 input-group offset-lg-0">
+                <input asp-for="Password" class="form-control form-control-sm" />
+                @*To show and hide password by clicking on eye and append it to Password Field*@
+                <div class="input-group-append">
+                    <span class="input-group-text form-control form-control-sm">
+                        <i id="togglePassword" class="fa fa-eye fa-eye-slash"></i>
+                    </span>
+                </div>
+            </div>
+            <span asp-validation-for="Password" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*CONFIRM PASSWORD TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="ConfirmPwd" class="form-label offset-1 col-lg-3 ">Confirm Password:</label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 input-group offset-lg-0">
+                <input asp-for="ConfirmPwd" class="form-control form-control-sm" />
+                @*To show and hide password by clicking on eye and append it to Password Field*@
+                <div class="input-group-append">
+                    <span class="input-group-text form-control form-control-sm">
+                        <i id="toggleConfirmPassword" class="fa fa-eye fa-eye-slash"></i>
+                    </span>
+                </div>
+            </div>
+            <span asp-validation-for="ConfirmPwd" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*EMAIL TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="Email" class="form-label offset-1 col-lg-3">
+                Email:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="Email" class="form-control form-control-sm" />
+            </div>
+
+            <span asp-validation-for="Email" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*CONTACT NUMBER TEXT FIELD*@
+        <div class="row form-group field">
+            <label asp-for="ContactNo" class="form-label offset-1 col-lg-3">
+                ContactNo:
+            </label>
+            <div class="col-lg-5 col-sm-7 col-10 offset-1 offset-lg-0">
+                <input asp-for="ContactNo" class="form-control form-control-sm" />
+            </div>
+            <span asp-validation-for="ContactNo" class="text-danger col-lg-3 offset-1 offset-lg-0"></span>
+        </div>
+
+        @*CREATE BUTTON*@
+        <div class="row">
+            <div class="col-lg-9 col-7"></div>
+            <input type="submit" value="Create"
+                   class="btn btn-sm btn-primary col-lg-2 col-3" />
+        </div>
+    </form>
+</div>

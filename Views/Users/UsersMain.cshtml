@@ -1,0 +1,84 @@
+﻿@model List<Users>
+
+@section Script{
+<script>
+    // jQuery Table
+    $(document).ready(function(){
+        $('#JSUserTable').DataTable({
+            ordering: true,
+            paging: true,
+            searching: true,
+            info: true,
+            lengthChange: false,
+            pagelength: 5,
+            responsive: true
+        });
+    });
+    
+    function confirmDeletion(event, id) {
+        if (confirm(`Delete User: ` + id) === false) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    }
+</script>
+}
+
+<style>
+    #table {
+        padding: 60px
+    }
+</style>
+
+@*Show successful/ error message when click update/create... button*@
+@if (TempData["Msg"] != null)
+{
+    <div class="mb-3">
+        <div class="alert alert-success">
+            <text>@TempData["Msg"]</text>
+        </div>
+    </div>
+}
+
+<div id="table">
+    <table id="JSUserTable" class="table table-bordered table-hover">
+
+        @*TABLE HEADER*@
+        <thead>
+            <tr>
+                <th>UserID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        @*TABLE DATA*@
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.Username</td>
+                    <td>@user.Name</td>
+                    <td>@user.Role</td>
+                    <td>@user.Email</td>
+                    <td>@user.ContactNo</td>
+                    <td>
+                        <a asp-controller="Users" asp-action="Update" asp-route-id="@user.UserId">
+                            Update
+                        </a>
+                        <span>/</span>
+                        <a asp-controller="Users" asp-action="Delete" asp-route-id="@user.UserId" onclick="return confirmDeletion(event,'@user.Name')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
